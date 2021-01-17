@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--
+To change this license he<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <head>
+        <title>My JSONPowerDB Assignment</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="header.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+    </head>
+    <body>
+        <nav class="navigation navbar navbar-fixed-top">
+
+            <ul class="mainlink">
+                <li><a href="index.html">Customer</a></li>
+                <li><a href="employee.html">Employee</a></li>
+                <li><a href="#">Room</a></li>
+            </ul>
+        </nav><br><br><br><br>
+
+        <div class="container">
+            <h2>Update Room Details</h2>
+            <form id="roomForm" method="post">
+                <div class="form-group">
+                    <span><label for="roomNo">Room No:</label> 
+                        <input type="text" class="form-control" name="roomNo" id="roomNo"
+                               placeholder="Enter Room Number" required>
+                </div>
+                
+                <div class="form-group">
+                    <span><label for="roomStatus">Room Status:</label> 
+                        <input type="text" class="form-control" name="roomStatus" id="roomStatus"
+                               placeholder="Available / Unavailable" required>
+                </div>
+                
+                <div class="form-group">
+                    <span><label for="roomType">Room Type:</label> 
+                        <input type="text" class="form-control" name="roomType" id="roomType"
+                               placeholder="Single Bed / Double Bed" required>
+                </div>
+                
+                <div class="form-group">
+                    <span><label for="roomCondition">Room Condition:</label> 
+                        <input type="text" class="form-control" name="roomCondition" id="roomCondition"
+                               placeholder="AC / Non-AC" required>
+                </div>
+
+                <input type="button" class="btn btn-primary" id="custSave" value="Save"
+                               onclick="saveEmployee();">
+            </form>
+
+        </div>
+
+    <script>
+
+                            function validateAndGetFormData() {
+                                
+                                var roomNoVar = $("#roomNo").val();
+                                if (roomNoVar === "") {
+                                    alert("Room Number is required");
+                                    $("#roomNo").focus();
+                                    return "";
+                                }
+                                var roomStatusVar = $("#roomStatus").val();
+                                if (roomStatusVar === "") {
+                                    alert("Room Status is required");
+                                    $("#roomStatus").focus();
+                                    return "";
+                                }
+                                var roomTypeVar = $("#roomType").val();
+                                if (roomTypeVar === "") {
+                                    alert("Room Type is required");
+                                    $("#roomType").focus();
+                                    return "";
+                                }
+                                var roomConditionVar = $("#roomCondition").val();
+                                if (roomConditionVar === "") {
+                                    alert("Room Condition is required");
+                                    $("#roomCondition").focus();
+                                    return "";
+                                }
+                                var jsonStrObj = {
+
+                                    Condition: roomConditionVar,
+                                    RoomNo: roomNoVar,
+                                    RoomType: roomTypeVar,
+                                    Status: roomStatusVar,
+
+                                };
+                                return JSON.stringify(jsonStrObj);
+                            }
+
+                            function resetForm() {
+                                $("#roomNo").val("")
+                                $("#roomStatus").val("");
+                                $("#roomType").val("");
+                                $("#roomCondition").val("");
+                                $("#roomNo").focus();
+                            }
+
+
+                            function saveEmployee() {
+                                //Validate form data
+                                var jsonStr = validateAndGetFormData();
+                                if (jsonStr === "") {
+                                    return;
+                                }
+
+                                //create JPDB request
+                                var putReqStr = createPUTRequest("90937198|-31948800299308005|90933119",
+                                        jsonStr, "HOTEL", "room");
+                                alert(putReqStr);
+
+                                jQuery.ajaxSetup({async: false});
+                                //execute the request
+                                var resultObj = executeCommandAtGivenBaseUrl(putReqStr, "http://api.login2explore.com:5577", "/api/iml");
+                                jQuery.ajaxSetup({async: true});
+                                alert(JSON.stringify(resultObj));
+
+                                //reset the form data
+                                resetForm();
+
+                                //alert('Hello');               
+                            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <head>
+        <title>My JSONPowerDB Assignment</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="header.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+    </head>
+    <body>
+        <nav class="navigation navbar navbar-fixed-top">
+
+            <ul class="mainlink">
+                <li><a href="#">Customer</a></li>
+                <li><a href="employee.html">Employee</a></li>
+                <li><a href="room.html">Room</a></li>
+            </ul>
+        </nav><br><br><br><br>
+        <div class="container">
+            <h2>Add Customer Details</h2>
+            <form id="custForm" method="post">
+                <div class="form-group">
+                    <span><label for="custName">Customer Name</label> 
+                    <input type="text" class="form-control" name="custName" id="custName"
+                           placeholder="Enter Customer Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="custAddress">Customer Address</label>
+                    <input type="text" class="form-control" id="custAddress"
+                           placeholder="Enter Customer Address" name="custAddress">
+                </div>
+                <div class="form-group">
+                    <label for="custEmail">Customer Email:</label>
+                    <input type="email" class="form-control" id="custEmail"
+                           placeholder="Enter Customer Email" name="custEmail">
+                </div>
+                <div class="form-group">
+                    <label for="custRoom">Room Number:</label>
+                    <input type="email" class="form-control" id="custRoom"
+                           placeholder="Enter Customer Room number" name="custRoom">
+                </div>
+                <input type="button" class="btn btn-primary" id="custSave" value="Save"
+                       onclick="saveCustomer();">
+            </form>
+           
+        </div>
+        
+        <script>
+            
+            function validateAndGetFormData() {
+                var custNameVar = $("#custName").val();
+                if (custNameVar === "") {
+                    alert("Customer name is required");
+                    $("#custName").focus();
+                    return "";
+                }
+                var custAddressVar = $("#custAddress").val();
+                if (custAddressVar === "") {
+                    alert("Customer Adress is required");
+                    $("#custAddress").focus();
+                    return "";
+                }
+                var custEmailVar = $("#custEmail").val();
+                if (custEmailVar === "") {
+                    alert("Customer Mail is required");
+                    $("#custEmail").focus();
+                    return "";
+                }
+                var custRoomVar = $("#custRoom").val();
+                if (custRoomVar === "") {
+                    alert("Customer Room is required");
+                    $("#custRoom").focus();
+                    return "";
+                }
+                var jsonStrObj = {
+                    Address: custAddressVar,
+                    Email: custEmailVar,
+                    Name:  custNameVar,
+                    RoomNo: custRoomVar
+           
+                };
+                return JSON.stringify(jsonStrObj);
+            }
+            
+             function resetForm() {
+                $("#custName").val("")
+                $("#custAddress").val("");
+                $("#custEmail").val("");
+                $("#custRoom").val("");
+                $("#custName").focus();
+            }
+
+            
+            function saveCustomer() {
+                //Validate form data
+                var jsonStr = validateAndGetFormData();
+                if (jsonStr === "") {
+                    return;
+                }
+                
+                //create JPDB request
+                var putReqStr = createPUTRequest("90937198|-31948800299308005|90933119",
+                        jsonStr, "HOTEL", "customer");
+                alert(putReqStr);
+                
+                jQuery.ajaxSetup({async: false});
+                //execute the request
+                var resultObj = executeCommandAtGivenBaseUrl(putReqStr, "http://api.login2explore.com:5577", "/api/iml");
+                jQuery.ajaxSetup({async: true});
+                alert(JSON.stringify(resultObj));
+                
+                //reset the form data
+                resetForm();
+
+                //alert('Hello');               
+            }
+        </script>
+    </body>
+</html>

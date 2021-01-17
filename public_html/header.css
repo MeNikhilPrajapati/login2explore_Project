@@ -1,0 +1,38 @@
+nav img{
+    width: 80px;
+    height: 70px;
+    margin-left: 50px;   
+}
+.navigation{
+    width: 100%;
+    height: 80px;
+    float: left;
+    background-color: red;
+    line-height: 70px;
+    margin-top: -10px;
+}
+nav .mainlink{
+    float: right;
+    margin-right: 30px;
+}
+nav .mainlink li{
+
+    list-style-type: none;
+    display: inline-block;
+    transition: 0.8s all;
+}
+nav .mainlink li:hover{
+    background-color: rgb(14, 194, 14);
+
+}
+nav .mainlink li a{
+    text-decoration: none;
+    color: white;
+    padding: 30px;
+    padding-top: -30px;
+    font-size: 30px;
+}
+select{
+    width: 100%;
+    height: 30px;
+}
